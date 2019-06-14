@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author phh
+ *
+ */
+module Photo {
+}
