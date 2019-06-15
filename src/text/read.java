@@ -2,28 +2,25 @@ package text;
 
 import java.io.*;
 
+import sun.security.krb5.internal.ccache.Tag;
+
 public class read {
 	public static void main(String[] args) throws Exception {
 		// 指定要读取的图片
-		FileInputStream in = new FileInputStream(new File("C:\\Users\\吴利明\\Desktop\\test1.jpg"));
-		File file = new File("C:\\Users\\吴利明\\Desktop\\test1.jpg");
-		if (!file.exists()) {
-			// 如果文件不存在，则创建该文件
-			file.createNewFile();
-		}
-		// 指定要写入的图片
-		FileOutputStream out = new FileOutputStream(new File("C:\\Users\\吴利明\\Desktop\\test1.jpg"));
-		// 每次读取的字节长度
-		int n = 0;
-		// 存储每次读取的内容
-		byte[] bb = new byte[1024];
-		while ((n = in.read(bb)) != -1) {
-			// 将读取的内容，写入到输出流当中
-			out.write(bb, 0, n);
-		}
-		// 关闭输入输出流
-		out.close();
-		in.close();
+		File jpegFile = new File("C:\\Users\\吴利明\\Desktop\\test1.jpg");
+        Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
+        for (Directory directory : metadata.getDirectories()) {
+            for (Tag tag : directory.getTags()) {
+                //格式化输出[directory.getName()] - tag.getTagName() = tag.getDescription()
+                System.out.format("[%s] - %s = %s\n",
+                        directory.getName(), tag.getTagName(), tag.getDescription());
+            }
+            if (directory.hasErrors()) {
+                for (String error : directory.getErrors()) {
+                    System.err.format("ERROR: %s", error);
+                }
+            }
+        }
 	}
 //	public static void main(String[] args) {
 //		String dirname = "/tmp";
